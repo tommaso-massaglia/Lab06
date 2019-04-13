@@ -48,5 +48,5 @@ public class Rilevamento {
 	public String toString() {
 		return String.valueOf(umidita);
 	}
-
+	
 }

@@ -1,5 +1,6 @@
 package it.polito.tdp.meteo.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Citta {
@@ -12,9 +13,10 @@ public class Citta {
 		this.nome = nome;
 	}
 	
-	public Citta(String nome, List<Rilevamento> rilevamenti) {
+	public Citta(String nome, Rilevamento rilevamenti) {
 		this.nome = nome;
-		this.rilevamenti = rilevamenti;
+		this.rilevamenti = new ArrayList<Rilevamento>();
+		this.rilevamenti.add(rilevamenti);
 	}
 
 	public String getNome() {
@@ -29,8 +31,8 @@ public class Citta {
 		return rilevamenti;
 	}
 
-	public void setRilevamenti(List<Rilevamento> rilevamenti) {
-		this.rilevamenti = rilevamenti;
+	public void addRilevamenti(Rilevamento rilevamenti) {
+		this.rilevamenti.add(rilevamenti);
 	}
 
 	public int getCounter() {
