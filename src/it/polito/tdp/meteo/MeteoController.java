@@ -35,14 +35,14 @@ public class MeteoController {
 
 	@FXML
 	void doCalcolaSequenza(ActionEvent event) {
-
+		txtResult.setText(model.trovaSequenza(boxMese.getValue()));
 	}
 
 	@FXML
 	void doCalcolaUmidita(ActionEvent event) {
-		txtResult.clear();
 		txtResult.setText(model.getUmiditaMedia(boxMese.getValue()));
 	}
+
 
 	@FXML
 	void initialize() {
@@ -55,7 +55,7 @@ public class MeteoController {
 	public void setModel(Model model) {
 		this.model = model;
 		ObservableList<Integer> mesi = FXCollections.observableArrayList();
-		for (int i=1; i<=12; i++) {
+		for (int i = 1; i <= 12; i++) {
 			mesi.add(i);
 		}
 		boxMese.setItems(mesi);
