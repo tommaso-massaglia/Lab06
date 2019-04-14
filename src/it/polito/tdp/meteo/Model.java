@@ -3,8 +3,10 @@ package it.polito.tdp.meteo;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.polito.tdp.meteo.bean.Citta;
 import it.polito.tdp.meteo.bean.Rilevamento;
@@ -109,6 +111,7 @@ public class Model {
 
 	private boolean controllaParziale(List<SimpleCity> parziale) {
 		int contatore = 0;
+		Set<String> cittavisitate = new HashSet<String>();
 		SimpleCity precedente = null;
 		for (SimpleCity sc : parziale) {
 			if (sc.equals(precedente)) {
@@ -123,8 +126,11 @@ public class Model {
 				}
 				precedente = sc;
 				contatore = 1;
+				cittavisitate.add(sc.getNome());
 			}
 		}
+		if (cittavisitate.size()!=this.listacitta.size() && parziale.size()==Model.NUMERO_GIORNI_TOTALI)
+			return false;
 		return true;
 	}
 
