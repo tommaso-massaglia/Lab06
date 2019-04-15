@@ -65,7 +65,7 @@ public class Model {
 	 */
 	public String trovaSequenza(int mese) {
 		
-		long ti = System.currentTimeMillis();
+		double ti = System.currentTimeMillis();
 
 		best_score = 999999999.0;
 		List<SimpleCity> parziale = new ArrayList<SimpleCity>();
@@ -79,7 +79,7 @@ public class Model {
 			result += contatore + ". " + sc.toString()+"\n";
 			contatore++;
 		}
-		result += "Punteggio: "+this.best_score+", Tempo Impiegato: "+(System.currentTimeMillis()-ti)/100;
+		result += "Punteggio: "+this.best_score+", Tempo Impiegato: "+(System.currentTimeMillis()-ti)/1000+" secondi";
 		
 		return result;
 	}
