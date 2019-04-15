@@ -22,16 +22,22 @@ public class Model {
 
 	private Map<String, Citta> listacitta;
 	private double best_score;
+	private List<Rilevamento> rilevamenti;
 	private List<SimpleCity> best_list;
-	private MeteoDAO dao;
+	//private MeteoDAO dao;
 
 	public Model() {
 		this.listacitta = new HashMap<String, Citta>();
+		this.rilevamenti = new ArrayList<Rilevamento>();
 		this.popolaListaCitta();
 		this.best_list = new ArrayList<SimpleCity>();
-		this.dao = new MeteoDAO();
 	}
 
+	/**
+	 * Restituisce l'umidità media del mese passato come parametro
+	 * @param mese un {@link int} del mese
+	 * @return una stringa contenente l'umidità media
+	 */
 	public String getUmiditaMedia(int mese) {
 		int somma = 0;
 		int contatore = 0;
@@ -48,6 +54,15 @@ public class Model {
 		return risultato;
 	}
 
+	/**
+	 * Riceve come parametro un {@link int} del mese e restituisce la sequenza
+	 * ottima in cui l'impiegato dovrebbe visitare le città tenenendo conto dei
+	 * parametri specificati dagli {@link static} sopra; il metodo è ricorsivo,
+	 * salva i dati prima di iniziare a passarli in rassegna ed esce se il punteggio
+	 * è superiore al migliore salvato o se non rispetta i parametri
+	 * @param mese un {@link int} che indica il mese
+	 * @return una stringa contenente riga per riga la sequenza ottima
+	 */
 	public String trovaSequenza(int mese) {
 		
 		long ti = System.currentTimeMillis();
@@ -64,11 +79,17 @@ public class Model {
 			result += contatore + ". " + sc.toString()+"\n";
 			contatore++;
 		}
-		result += "Punteggio: "+this.best_score+", Tempo Impiegato: "+(System.currentTimeMillis()-ti)/1000;
+		result += "Punteggio: "+this.best_score+", Tempo Impiegato: "+(System.currentTimeMillis()-ti)/100;
 		
 		return result;
 	}
 
+	/**
+	 * La funzione che cerca la soluzione ottima
+	 * @param mese il mese di cui cercare la sequenza
+	 * @param parziale la lista temporanea trovata
+	 * @param L il livello in cui iniziare il metodo
+	 */
 	public void cerca(int mese, List<SimpleCity> parziale, int L) {
 		// Casi Terminali
 
@@ -89,7 +110,7 @@ public class Model {
 			return;
 		}
 		// Iterazioni
-		for (Rilevamento r : dao.getAllRilevamentiMeseGG(mese, L + 1)) {
+		for (Rilevamento r : this.getRilevamentiGG(mese, L + 1)) {
 			parziale.add(new SimpleCity(r.getLocalita(), r.getUmidita()));
 			this.cerca(mese, parziale, L + 1);
 			parziale.remove(L);
@@ -97,6 +118,12 @@ public class Model {
 
 	}
 
+	/**
+	 * calcola il punteggio del parziale passato
+	 * @param soluzioneCandidata una lista contenente una soluzione parziale del
+	 * problema
+	 * @return il punteggio
+	 */
 	private Double punteggioSoluzione(List<SimpleCity> soluzioneCandidata) {
 		double score = 0.0;
 		for (int i = 0; i < soluzioneCandidata.size(); i++) {
@@ -109,6 +136,11 @@ public class Model {
 		return score;
 	}
 
+	/**
+	 * controlla che la lista rispetti i parametri {@link static} decisi prima
+	 * @param parziale la lista da controllare
+	 * @return {@link true} se corretto e {@link false} altrimenti
+	 */
 	private boolean controllaParziale(List<SimpleCity> parziale) {
 		int contatore = 0;
 		Set<String> cittavisitate = new HashSet<String>();
@@ -133,10 +165,24 @@ public class Model {
 			return false;
 		return true;
 	}
+	
+	// Ottiene tutti i rilevamenti del giorno specificato nel mese specificato
+	@SuppressWarnings("deprecation")
+	private List<Rilevamento> getRilevamentiGG(int mese,int giorno){
+		List<Rilevamento> risultato = new ArrayList<Rilevamento>();
+		for (Rilevamento r : this.rilevamenti) {
+			if (r.getData().getMonth()==mese-1 && r.getData().getDate()==giorno) {
+				risultato.add(r);
+			}
+		}
+		return risultato;
+	}
 
+	// Popola la lista città e rilevamenti dal database
 	private void popolaListaCitta() {
 		MeteoDAO dao = new MeteoDAO();
 		for (Rilevamento r : dao.getAllRilevamenti()) {
+			this.rilevamenti.add(r);
 			if (!this.listacitta.containsKey(r.getLocalita())) {
 				this.listacitta.put(r.getLocalita(), new Citta(r.getLocalita(), r));
 				System.out.println(listacitta.get(r.getLocalita()));

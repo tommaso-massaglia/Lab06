@@ -68,7 +68,7 @@ public class MeteoDAO {
 		}
 	}
 
-	public List<Rilevamento> getAllRilevamentiMeseGG(int mese, int giorno) {
+	/*public List<Rilevamento> getAllRilevamentiMeseGG(int mese, int giorno) {
 		final String sql = "SELECT Localita, Data, Umidita FROM situazione WHERE MONTH(DATA)=? && DAY(DATA)=?";
 
 		List<Rilevamento> rilevamenti = new ArrayList<Rilevamento>();
@@ -95,5 +95,5 @@ public class MeteoDAO {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
+	}*/
 }
