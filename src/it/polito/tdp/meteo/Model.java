@@ -21,8 +21,8 @@ public class Model {
 	private final static int NUMERO_GIORNI_TOTALI = 15;
 
 	private Map<String, Citta> listacitta;
-	private double best_score;
 	private List<Rilevamento> rilevamenti;
+	private double best_score;
 	private List<SimpleCity> best_list;
 	//private MeteoDAO dao;
 
@@ -30,7 +30,7 @@ public class Model {
 		this.listacitta = new HashMap<String, Citta>();
 		this.rilevamenti = new ArrayList<Rilevamento>();
 		this.popolaListaCitta();
-		this.best_list = new ArrayList<SimpleCity>();
+		//this.best_list = new ArrayList<SimpleCity>();
 	}
 
 	/**
@@ -68,6 +68,7 @@ public class Model {
 		double ti = System.currentTimeMillis();
 
 		best_score = 999999999.0;
+		this.best_list = new ArrayList<SimpleCity>();
 		List<SimpleCity> parziale = new ArrayList<SimpleCity>();
 		this.cerca(mese, parziale, 0);
 		String result = new String();
